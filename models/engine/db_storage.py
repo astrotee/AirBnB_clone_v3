@@ -43,7 +43,7 @@ class DBStorage:
         if cls:
             tables = [cls]
         else:
-            tables = [State, City]
+            tables = [User, State, City]
         for c in tables:
             objs = self.__session.query(c).all()
             records.update({f"{o.__class__.__name__}.{o.id}": o for o in objs})
