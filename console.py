@@ -143,6 +143,7 @@ class HBNBCommand(cmd.Cmd):
                     if aname in HBNBCommand.types and HBNBCommand.types[aname] is not int: continue
                     atts[aname] = int(avalue)
             new_instance.__dict__.update(atts)
+        new_instance.save()
         storage.save()
         print(new_instance.id)
         storage.save()
