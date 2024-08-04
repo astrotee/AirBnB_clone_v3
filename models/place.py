@@ -1,10 +1,19 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from sqlalchemy import Column, Float, ForeignKey, Integer, String
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
+from models.amenity import Amenity
 from models.base_model import Base, BaseModel
 from models.review import Review
 from models import storage_type
+
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False),
+                      )
 
 
 class Place(BaseModel, Base):
@@ -23,6 +32,8 @@ class Place(BaseModel, Base):
         longitude = Column(Float, nullable=True)
         reviews = relationship('Review', backref='place',
                                cascade="all, delete, delete-orphan")
+        amenities = relationship('Amenity', backref='place_amenities',
+                                 secondary=place_amenity, viewonly=False)
     else:
         city_id = ""
         user_id = ""
@@ -42,3 +53,16 @@ class Place(BaseModel, Base):
             from models import storage
             cs = storage.all(Review)
             return [c for c in cs if cs.place_id == self.id]
+
+        @property
+        def amenities(self):
+            """returns the list of Amenity instances linked to the Place"""
+            from models import storage
+            cs = storage.all(Amenity)
+            return [c for c in cs if cs.id in self.amenity_ids]
+
+        @amenities.setter
+        def amenities(self, obj):
+            """returns the list of Amenity instances linked to the Place"""
+            if isinstance(obj, Amenity) and obj.id not in self.amenity_ids:
+                self.amenity_ids.append(obj.id)
