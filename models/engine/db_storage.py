@@ -4,6 +4,7 @@ import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+
 from models.amenity import Amenity
 from models.base_model import Base
 from models.city import City
@@ -25,8 +26,8 @@ class DBStorage:
         database = os.getenv("HBNB_MYSQL_DB", "hbnb_dev_db")
         environment = os.getenv("HBNB_ENV", "dev")
         self.__engine = create_engine(
-                f"mysql+mysqldb://{user}:{password}@{host}/{database}",
-                pool_pre_ping=True)
+            f"mysql+mysqldb://{user}:{password}@{host}/{database}",
+            pool_pre_ping=True)
         if environment == "test":
             Base.metadata.drop_all()
 

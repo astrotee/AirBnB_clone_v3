@@ -2,9 +2,10 @@
 """ State Module for HBNB project """
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+
+from models import storage_type
 from models.base_model import Base, BaseModel
 from models.city import City
-from models import storage_type
 
 
 class State(BaseModel, Base):
