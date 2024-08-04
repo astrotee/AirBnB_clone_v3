@@ -19,16 +19,16 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
+        'BaseModel': BaseModel, 'User': User, 'Place': Place,
+        'State': State, 'City': City, 'Amenity': Amenity,
+        'Review': Review
+    }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
-             'number_rooms': int, 'number_bathrooms': int,
-             'max_guest': int, 'price_by_night': int,
-             'latitude': float, 'longitude': float
-            }
+        'number_rooms': int, 'number_bathrooms': int,
+        'max_guest': int, 'price_by_night': int,
+        'latitude': float, 'longitude': float
+    }
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -81,7 +81,7 @@ class HBNBCommand(cmd.Cmd):
                         # _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
 
-        except Exception as mess:
+        except Exception:
             pass
         finally:
             return line
@@ -131,16 +131,22 @@ class HBNBCommand(cmd.Cmd):
                 aname = aname.strip()
                 avalue = avalue.strip()
                 if avalue[0] == '"' and avalue[-1] == '"':
-                    if aname in HBNBCommand.types: continue
+                    if aname in HBNBCommand.types:
+                        continue
                     avalue = avalue.strip('"')
                     avalue = avalue.replace('_', ' ')
                     atts[aname] = avalue
                 elif '.' in avalue:
-                    if not avalue.strip('-').replace('.', '').isnumeric(): continue
-                    if aname in HBNBCommand.types and HBNBCommand.types[aname] is not float: continue
+                    if not avalue.strip('-').replace('.', '').isnumeric():
+                        continue
+                    if aname in HBNBCommand.types and \
+                            HBNBCommand.types[aname] is not float:
+                        continue
                     atts[aname] = float(avalue)
                 elif avalue.strip('-').isnumeric():
-                    if aname in HBNBCommand.types and HBNBCommand.types[aname] is not int: continue
+                    if aname in HBNBCommand.types and \
+                            HBNBCommand.types[aname] is not int:
+                        continue
                     atts[aname] = int(avalue)
             new_instance.__dict__.update(atts)
         new_instance.save()
@@ -209,7 +215,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -245,7 +251,7 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, args):
         """Count current number of class instances"""
         count = 0
-        for k, v in storage.all().items():
+        for k in storage.all().keys():
             if args == k.split('.')[0]:
                 count += 1
         print(count)
@@ -341,6 +347,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

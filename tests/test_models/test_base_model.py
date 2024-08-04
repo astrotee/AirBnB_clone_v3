@@ -3,7 +3,6 @@
 from models.base_model import BaseModel
 import unittest
 import datetime
-from uuid import UUID
 import json
 import os
 
@@ -24,7 +23,7 @@ class test_basemodel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        except Exception:
             pass
 
     def test_default(self):
@@ -45,7 +44,7 @@ class test_basemodel(unittest.TestCase):
         copy = i.to_dict()
         copy.update({1: 2})
         with self.assertRaises(TypeError):
-            new = BaseModel(**copy)
+            BaseModel(**copy)
 
     def test_save(self):
         """ Testing save """
@@ -72,7 +71,7 @@ class test_basemodel(unittest.TestCase):
         """ """
         n = {None: None}
         with self.assertRaises(TypeError):
-            new = self.value(**n)
+            self.value(**n)
 
     def test_kwargs_one(self):
         """ """
