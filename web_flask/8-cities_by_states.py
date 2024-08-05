@@ -12,7 +12,6 @@ app = Flask(__name__)
 def states_list():
     """list all cities by states in storage"""
     states = storage.all(State)
-    print(states)
     return render_template('8-cities_by_states.html', states=states.values())
 
 
