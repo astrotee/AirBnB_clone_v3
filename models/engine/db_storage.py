@@ -45,6 +45,21 @@ class DBStorage:
             records.update({f"{o.__class__.__name__}.{o.id}": o for o in objs})
         return records
 
+    def get(self, cls, id):
+        """get a single object by id"""
+        return self.__session.query(cls).get(id)
+
+    def count(self, cls=None):
+        """count the number of objects in storage for given class"""
+        count = 0
+        if cls:
+            tables = [cls]
+        else:
+            tables = [User, State, City, Place, Review, Amenity]
+        for c in tables:
+            count += self.__session.query(c).count()
+        return count
+
     def new(self, obj):
         """Adds new object to storage dictionary"""
         self.__session.add(obj)

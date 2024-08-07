@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
+from functools import reduce
 
 
 class FileStorage:
@@ -15,6 +16,17 @@ class FileStorage:
                     if isinstance(v, cls)
                     }
         return FileStorage.__objects
+
+    def get(self, cls, id):
+        """get a single object by id"""
+        return FileStorage.__objects.get(cls.__class__ .__name__ + '.' + id)
+
+    def count(self, cls=None):
+        """count the number of objects in storage for given class"""
+        if cls:
+            return reduce(lambda a, b: a + 1 if isinstance(b, cls) else a,
+                          FileStorage.__objects.values(), 0)
+        return len(FileStorage.__objects)
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
