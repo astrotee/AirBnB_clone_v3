@@ -6,15 +6,18 @@ from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from models import storage_type
 
-
-Base = declarative_base()
+if storage_type == 'db':
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel:
     """A base class for all hbnb models"""
-    id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    if storage_type == 'db':
+        id = Column(String(60), primary_key=True, nullable=False)
+        created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+        updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
@@ -29,11 +32,11 @@ class BaseModel:
                                                        '%Y-%m-%dT%H:%M:%S.%f'))
                 elif k != '__class__':
                     setattr(self, k, kwargs[k])
-            if not hasattr(kwargs, 'id'):
+            if kwargs.get('id', None) is None:
                 setattr(self, 'id', str(uuid.uuid4()))
-            if not hasattr(kwargs, 'created_at'):
+            if kwargs.get('created_at', None) is None:
                 setattr(self, 'created_at', datetime.now())
-            if not hasattr(kwargs, 'updated_at'):
+            if kwargs.get('updated_at', None) is None:
                 setattr(self, 'updated_at', datetime.now())
 
     def __str__(self):
