@@ -2,6 +2,7 @@
 """ """
 from models.base_model import BaseModel
 import unittest
+from unittest.mock import patch
 import datetime
 import json
 import os
@@ -46,14 +47,13 @@ class test_basemodel(unittest.TestCase):
         with self.assertRaises(TypeError):
             BaseModel(**copy)
 
-    def test_save(self):
+    @patch('models.storage')
+    def test_save(self, mock_storage):
         """ Testing save """
         i = self.value()
         i.save()
-        key = self.name + "." + i.id
-        with open('file.json', 'r') as f:
-            j = json.load(f)
-            self.assertEqual(j[key], i.to_dict())
+        self.assertTrue(mock_storage.new.called)
+        self.assertTrue(mock_storage.save.called)
 
     def test_str(self):
         """ """

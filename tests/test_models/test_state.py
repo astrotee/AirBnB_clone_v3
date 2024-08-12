@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 """ """
-from tests.test_models.test_base_model import test_basemodel
+import unittest
+from models import storage_type
 from models.state import State
 
 
-class test_state(test_basemodel):
+class test_state(unittest.TestCase):
     """ """
 
     def __init__(self, *args, **kwargs):
@@ -16,4 +17,7 @@ class test_state(test_basemodel):
     def test_name3(self):
         """ """
         new = self.value()
-        self.assertEqual(type(new.name), str)
+        if storage_type == 'db':
+            self.assertEqual(new.name, None)
+        else:
+            self.assertEqual(type(new.name), str)

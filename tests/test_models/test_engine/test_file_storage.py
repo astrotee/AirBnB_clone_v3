@@ -2,12 +2,13 @@
 """ Module for testing file storage"""
 import unittest
 from models.base_model import BaseModel
-from models import storage
+from models import storage, storage_type
 import os
 
 from models.state import State
 
 
+@unittest.skipIf(storage_type == 'db', 'not using file storage')
 class test_fileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
@@ -122,5 +123,4 @@ class test_fileStorage(unittest.TestCase):
     def test_storage_var_created(self):
         """ FileStorage object storage created """
         from models.engine.file_storage import FileStorage
-        print(type(storage))
         self.assertEqual(type(storage), FileStorage)
