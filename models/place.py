@@ -52,14 +52,14 @@ class Place(BaseModel, Base):
             """the FileStorage relationship between Place and Review"""
             from models import storage
             cs = storage.all(Review)
-            return [c for c in cs if cs.place_id == self.id]
+            return [c for c in cs.values() if c.place_id == self.id]
 
         @property
         def amenities(self):
             """returns the list of Amenity instances linked to the Place"""
             from models import storage
             cs = storage.all(Amenity)
-            return [c for c in cs if cs.id in self.amenity_ids]
+            return [c for c in cs.values() if c.id in self.amenity_ids]
 
         @amenities.setter
         def amenities(self, obj):

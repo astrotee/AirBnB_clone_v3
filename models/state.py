@@ -23,4 +23,4 @@ class State(BaseModel, Base):
             """get cities that belong to that state"""
             from models import storage
             cs = storage.all(City)
-            return [c for c in cs if cs.state_id == self.id]
+            return [c for c in cs.values() if c.state_id == self.id]
