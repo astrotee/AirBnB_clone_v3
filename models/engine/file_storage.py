@@ -19,7 +19,7 @@ class FileStorage:
 
     def get(self, cls, id):
         """get a single object by id"""
-        return FileStorage.__objects.get(cls.__class__ .__name__ + '.' + id)
+        return FileStorage.__objects.get(cls.__name__ + '.' + id)
 
     def count(self, cls=None):
         """count the number of objects in storage for given class"""
