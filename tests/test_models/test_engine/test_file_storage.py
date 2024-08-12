@@ -5,6 +5,8 @@ from models.base_model import BaseModel
 from models import storage
 import os
 
+from models.state import State
+
 
 class test_fileStorage(unittest.TestCase):
     """ Class to test the file storage method """
@@ -42,6 +44,20 @@ class test_fileStorage(unittest.TestCase):
         temp = storage.all()
         self.assertIsInstance(temp, dict)
 
+    def test_get(self):
+        """test get object by id"""
+        state = State(name='test_state')
+        state.save()
+        get_state = storage.get(State, state.id)
+        self.assertEqual(state, get_state)
+
+    def test_count(self):
+        """test count of objects in storage"""
+        self.assertEqual(len(storage.all()), storage.count())
+        state = State(name='test_state')
+        state.save()
+        self.assertEqual(len(storage.all()), storage.count())
+
     def test_base_model_instantiation(self):
         """ File is not created on BaseModel save """
         new = BaseModel()
@@ -67,9 +83,7 @@ class test_fileStorage(unittest.TestCase):
         new.save()
         storage.save()
         storage.reload()
-        for obj in storage.all().values():
-            loaded = obj
-        self.assertEqual(new.to_dict()['id'], loaded.to_dict()['id'])
+        self.assertIn(new.id, [ s.id for s in storage.all().values() ])
 
     def test_reload_empty(self):
         """ Load from an empty file """
