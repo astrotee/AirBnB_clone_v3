@@ -40,9 +40,6 @@ def update_states(state_id=None):
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    state = storage.get(State, state_id)
-    if state is None:
-        abort(404)
     data = request.get_json(silent=True)
     if not data:
         abort(400, description='Not a JSON')
