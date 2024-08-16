@@ -24,11 +24,11 @@ def get_states(state_id=None):
     if request.method == 'GET':
         return jsonify([s.to_dict() for s in storage.all(State).values()])
     elif request.method == 'POST':
-        data = request.get_json()
+        data = request.get_json(silent=True)
         if not data:
             abort(400, description='Not a JSON')
         if 'name' not in data:
-            abort(401, description='Missing name')
+            abort(400, description='Missing name')
         state = State(**data)
         state.save()
         return jsonify(state.to_dict()), 201
@@ -36,7 +36,7 @@ def get_states(state_id=None):
         state = storage.get(State, state_id)
         if state is None:
             abort(404)
-        data = request.get_json()
+        data = request.get_json(silent=True)
         if not data:
             abort(400, description='Not a JSON')
         for k in data:
